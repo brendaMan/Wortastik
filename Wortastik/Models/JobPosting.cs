@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Worktastic.Models
+namespace Wortastik.Models
 {
     public class JobPosting
     {
@@ -26,6 +26,6 @@ namespace Worktastic.Models
 
         public byte[] CompanyImage { get; set; }
 
-
+        public  string OwnerUsername { get; set; }
     }
 }

@@ -33,12 +33,13 @@ namespace Wortastik
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -66,6 +67,40 @@ namespace Wortastik
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            CreateRole(serviceProvider, "Admin").Wait();
+            CreateDefaultUser(serviceProvider, "Admin", "admin@worktastic.com", "Test1.").Wait();
+        }
+
+        public async Task CreateRole(IServiceProvider serviceProvider, string roleName)
+        {
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            var roleExits = await roleManager.RoleExistsAsync(roleName);
+
+            if (roleExits)
+                return;
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+
+        public async Task CreateDefaultUser(IServiceProvider serviceProvider, string roleName, string username,
+            string pw)
+        {
+            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+
+            var user = await userManager.FindByNameAsync(username);
+
+            if (user == null)
+            {
+                var newUser = new IdentityUser()
+                {
+                    UserName = username,
+                    Email = username
+                };
+                await userManager.CreateAsync(newUser, pw);
+            }
+
+            await userManager.AddToRoleAsync(user, roleName);
         }
     }
 }
