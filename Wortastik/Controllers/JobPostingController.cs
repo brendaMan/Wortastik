@@ -16,11 +16,15 @@ namespace Worktastic.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>Initializes a new instance of the <see cref="T:Worktastic.Controllers.JobPostingController" /> class.</summary>
+        /// <param name="context">The context.</param>
         public JobPostingController(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>Indexes this instance.</summary>
+        /// <returns>IActionResult.</returns>
         public IActionResult Index()
         {
             if (User.IsInRole("Admin"))
@@ -34,6 +38,9 @@ namespace Worktastic.Controllers
             return View(jobPostingsFromDb);
         }
 
+        /// <summary>Creates the edit job posting.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IActionResult.</returns>
         public IActionResult CreateEditJobPosting(int id)
         {
             if (id != 0)
@@ -104,6 +111,9 @@ namespace Worktastic.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>Deletes the job posting by identifier.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost]
         public IActionResult DeleteJobPostingById(int id)
         {
@@ -120,7 +130,6 @@ namespace Worktastic.Controllers
 
             return Ok();
         }
-
 
     }
 }

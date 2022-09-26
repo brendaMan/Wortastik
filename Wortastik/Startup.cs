@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Wortastik.Data;
 
-namespace Wortastik
+namespace Worktastik
 {
     public class Startup
     {
@@ -25,6 +25,8 @@ namespace Wortastik
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>Configures the services.</summary>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -39,6 +41,10 @@ namespace Wortastik
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>Configures the specified application.</summary>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
@@ -72,35 +78,46 @@ namespace Wortastik
             CreateDefaultUser(serviceProvider, "Admin", "admin@worktastic.com", "Test1.").Wait();
         }
 
+        /// <summary>Creates the role.</summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="roleName">Name of the role.</param>
         public async Task CreateRole(IServiceProvider serviceProvider, string roleName)
         {
             var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
-            var roleExits = await roleManager.RoleExistsAsync(roleName);
+            var roleExits = roleManager != null && await roleManager.RoleExistsAsync(roleName);
 
             if (roleExits)
                 return;
-            await roleManager.CreateAsync(new IdentityRole(roleName));
+            if (roleManager != null) await roleManager.CreateAsync(new IdentityRole(roleName));
         }
 
+        /// <summary>Creates the default user.</summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="roleName">Name of the role.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="pw">The pw.</param>
         public async Task CreateDefaultUser(IServiceProvider serviceProvider, string roleName, string username,
             string pw)
         {
             var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
 
-            var user = await userManager.FindByNameAsync(username);
-
-            if (user == null)
+            if (userManager != null)
             {
-                var newUser = new IdentityUser()
-                {
-                    UserName = username,
-                    Email = username
-                };
-                await userManager.CreateAsync(newUser, pw);
-            }
+                var user = await userManager.FindByNameAsync(username);
 
-            await userManager.AddToRoleAsync(user, roleName);
+                if (user == null)
+                {
+                    var newUser = new IdentityUser()
+                    {
+                        UserName = username,
+                        Email = username
+                    };
+                    await userManager.CreateAsync(newUser, pw);
+                }
+
+                await userManager.AddToRoleAsync(user, roleName);
+            }
         }
     }
 }
