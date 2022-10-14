@@ -10,6 +10,10 @@ namespace Wortastik.Filters
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class ApiKeyAuthoriziation : Attribute, IAsyncActionFilter
     {
+        /// <summary>On action execution as an asynchronous operation.</summary>
+        /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext">ActionExecutingContext</see>.</param>
+        /// <param name="next">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate">ActionExecutionDelegate</see>. Invoked to execute the next action filter or the action itself.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             // Check API Auth

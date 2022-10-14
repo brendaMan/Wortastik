@@ -7,11 +7,14 @@ using Wortastik.Models;
 
 namespace Wortastik.Controllers
 {
+    /// <summary>Class ApiJobPostingController.
+    /// Implements the <see cref="ControllerBase" /></summary>
     [Route("api/jobposting")]
     [ApiController]
     [ApiKeyAuthoriziation]
     public class ApiJobPostingController : ControllerBase
     {
+        /// <summary>The context</summary>
         private readonly ApplicationDbContext _context;
 
         /// <summary>Initializes a new instance of the <see cref="T:Wortastik.Controllers.ApiJobPostingController" /> class.</summary>
@@ -46,6 +49,9 @@ namespace Wortastik.Controllers
             return Ok(jobPosting);
         }
 
+        /// <summary>Creates the specified job posting.</summary>
+        /// <param name="jobPosting">The job posting.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPost("Create")]
         public IActionResult Create(JobPosting jobPosting)
         {
@@ -58,6 +64,9 @@ namespace Wortastik.Controllers
             return Ok();
         }
 
+        /// <summary>Deletes the specified identifier.</summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IActionResult.</returns>
         [HttpDelete("Delete")]
         public IActionResult Delete(int id)
         {
@@ -73,6 +82,9 @@ namespace Wortastik.Controllers
 
         }
 
+        /// <summary>Updates the specified job posting.</summary>
+        /// <param name="jobPosting">The job posting.</param>
+        /// <returns>IActionResult.</returns>
         [HttpPut("Update")]
         public IActionResult Update(JobPosting jobPosting)
         {

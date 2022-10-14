@@ -11,9 +11,12 @@ using Wortastik.Models;
 
 namespace Worktastic.Controllers
 {
+    /// <summary>Class JobPostingController.
+    /// Implements the <see cref="Controller" /></summary>
     [Authorize]
     public class JobPostingController : Controller
     {
+        /// <summary>The context</summary>
         private readonly ApplicationDbContext _context;
 
         /// <summary>Initializes a new instance of the <see cref="T:Worktastic.Controllers.JobPostingController" /> class.</summary>
@@ -65,6 +68,10 @@ namespace Worktastic.Controllers
             return View();
         }
 
+        /// <summary>Creates the edit job.</summary>
+        /// <param name="jobPosting">The job posting.</param>
+        /// <param name="file">The file.</param>
+        /// <returns>IActionResult.</returns>
         public IActionResult CreateEditJob(JobPosting jobPosting, IFormFile file)
         {
             jobPosting.OwnerUsername = User.Identity.Name;
