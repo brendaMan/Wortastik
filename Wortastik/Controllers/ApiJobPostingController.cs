@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Wortastik.Data;
+using Wortastik.Filters;
 using Wortastik.Models;
 
 namespace Wortastik.Controllers
 {
     [Route("api/jobposting")]
     [ApiController]
+    [ApiKeyAuthoriziation]
     public class ApiJobPostingController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
